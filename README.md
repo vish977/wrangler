@@ -1,3 +1,23 @@
+# Wrangler - Custom Parser Enhancements
+
+This repository contains updates to the [CDAP Wrangler](https://github.com/data-integrations/wrangler) module, focusing on extending its parsing capabilities using ANTLR.
+
+---
+
+## 🔧 What's New
+
+### ✅ ANTLR Grammar Enhancements
+- Updated `Directives.g4` grammar file with new parser rules:
+  - `ByteSizeArg`
+  - `TimeDurationArg`
+- Located at:  
+  `wrangler-core/src/main/antlr4/io/cdap/wrangler/parser/Directives.g4`
+
+### ✅ Parser Regeneration
+- Used `antlr-4.13.1-complete.jar` to regenerate the parser files:
+  ```bash
+  java -jar tools/antlr-4.13.1-complete.jar -Dlanguage=Java -visitor Directives.g4 -o gen
+  
 # Data Prep
 
 ![cm-available](https://cdap-users.herokuapp.com/assets/cm-available.svg)
