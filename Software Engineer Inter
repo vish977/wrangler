@@ -1,0 +1,97 @@
+# Software Engineer Intern Assignment
+
+## Part 1: Enhance Wrangler with Byte Size and Time Duration Units Parsers
+
+### Problem Understanding
+Wrangler lacked the ability to natively parse human-friendly byte and time units (like `10MB`, `150ms`). This created friction for users when working on recipes involving size or duration calculations.
+
+### Solution Overview
+
+1. **Forked Repository:**
+   - Forked from https://github.com/data-integrations/wrangler.
+   - Created feature branch: `feature/byte-time-support`.
+
+2. **Grammar Update:**
+   - Updated `Directives.g4` to add two new lexer tokens:
+```
+fragment BYTE_UNIT : 'B' | 'KB' | 'MB' | 'GB' | 'TB' | 'PB';
+fragment TIME_UNIT : 'ns' | 'us' | 'ms' | 's' | 'm' | 'h' | 'd';
+BYTE_SIZE : [0-9]+ ('.' [0-9]+)? BYTE_UNIT;
+TIME_DURATION : [0-9]+ ('.' [0-9]+)? TIME_UNIT;
+```
+
+3. **Java API Update:**
+- Added `ByteSize.java` and `TimeDuration.java` to `wrangler-api`:
+- Both extend `Token.java` and parse string representations into canonical units.
+- Provided methods `getBytes()` and `getNanos()`.
+
+4. **Core Parser Update:**
+- Added visitor methods like `visitByteSizeArg` and `visitTimeDurationArg` to handle the new tokens.
+- Registered the parsed tokens in `TokenGroup`.
+
+5. **New Directive: AggregateStats.java**
+- Created a directive that can compute aggregates (sum, average) for byte sizes and time durations across dataset rows.
+- Supports argument-based unit output selection.
+- Compatible with Wrangler aggregation lifecycle.
+
+6. **Testing:**
+- Added tests for ByteSize and TimeDuration classes.
+- Added recipe parsing tests to validate new tokens.
+- Wrote unit tests to validate aggregation behavior and unit conversion.
+
+### Deliverables:
+- Directives.g4 (Modified).
+- ByteSize.java, TimeDuration.java.
+- AggregateStats.java.
+- Unit tests in wrangler-core.
+- prompts.txt for AI prompts used.
+
+---
+
+## Part 2: ClickHouse & Flat File Data Ingestion Tool
+
+### Problem Understanding
+Needed a web-based UI and backend to:
+- Move data between ClickHouse and Flat Files.
+- Support JWT-authenticated ClickHouse connections.
+- Allow schema discovery and column selection.
+- Report the total number of ingested records.
+
+### Solution Overview
+
+1. **Tech Stack:**
+- Backend: Java + Spring Boot.
+- Frontend: React.js.
+
+2. **Backend Implementation:**
+- `ClickHouseClient.java`: Handles JWT-based auth and queries.
+- `FlatFileService.java`: Reads/writes CSV files.
+- `IngestionController.java`: API for schema fetch, ingestion, status reporting.
+
+3. **Frontend Implementation:**
+- Simple forms for connection and schema selection.
+- Progress bar and status messages.
+- Data preview option.
+
+4. **Error Handling:**
+- Implemented error cases for invalid JWT, network issues, and schema mismatches.
+
+5. **Testing:**
+- Verified ingestion using ClickHouse sample datasets (uk_price_paid).
+- Covered multiple scenarios:
+  - ClickHouse -> Flat File.
+  - Flat File -> ClickHouse.
+  - Schema join ingestion.
+  - JWT token failures.
+
+### Deliverables:
+- Backend Java project with REST endpoints.
+- React.js frontend.
+- Unit + Integration tests.
+- README.md with setup and usage.
+- prompts.txt (if AI was used).
+
+---
+
+Assignment successfully completed 
+
